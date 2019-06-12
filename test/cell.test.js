@@ -9,3 +9,13 @@ let obj = {
 test('cell init', () => {
     expect(cell).toEqual(obj);
 });
+
+test('cell set alive', () => {
+    cell.setAlive();
+    expect(cell.status).toBe(1);
+})
+
+test('cell set dead', () => {
+    cell.setDead();
+    expect(cell.status).toBe(0);
+})
