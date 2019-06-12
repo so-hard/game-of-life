@@ -36,7 +36,7 @@ class Board {
                 if (this.grid[i][j].status == 1) {
                     cxt.fillStyle = "#000000";
                 } else {
-                    cxt.fillStyle = "#ffffff";
+                    cxt.fillStyle = "#eeeeee";
                 }
 
                 // cell.init(rebaseWidth)
@@ -59,17 +59,14 @@ class Board {
 
     }
 
-    clear() {
-
-    }
 
     update() {
         let [n, m] = this.size
-        let newGrid = Array()
+        let newGrid = []
         for (let i = 0; i < n; i++) {
-            newGrid = new Array();
+            newGrid[i] = []
             for (let j = 0; j < m; j++) {
-                newGrid = new Cell(0, i, j);
+                newGrid[i][j] = new Cell(this.grid[i][j].status, i, j);
             }
         }
         for (let i = 0; i < n; i++) {
@@ -84,6 +81,8 @@ class Board {
             }
         }
         this.grid = newGrid
+        console.log(this.grid)
+        this.draw()
     }
 
     getNewStatus(i, j) {
