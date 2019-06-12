@@ -1,9 +1,8 @@
 class Cell{
-    constructor(x, y,cxt) {
-        this.status = 1;
+    constructor(status,x, y) {
+        this.status = status;
         this.x = x;
         this.y = y;
-        this.cxt = cxt;
     }
 
     setAlive(){
@@ -12,9 +11,6 @@ class Cell{
 
     setDead(){
         this.status = 0;
-    }
-    init () {
-        this.cxt.fillRect(this.x*rebaseWidth,this.y*rebaseWidth,rebaseWidth,rebaseWidth)
     }
 }
 

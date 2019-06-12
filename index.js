@@ -1,3 +1,7 @@
-import {createGrid} from "./js/canvas"
+import Board from "./js/board"
 const GridArray = [50,20]
-createGrid(GridArray)
+
+let board  = new Board (GridArray,10)
+
+board.grid_init()
+board.draw()
