@@ -3,4 +3,5 @@ node_modules
 .lock
 .idea/
 package-lock.json
+dist/
 
