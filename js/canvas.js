@@ -1,10 +1,8 @@
+import Cell from "./cell"
 let canvas = document.getElementById("canvas"),
 cxt = canvas.getContext("2d");
-const rebaseWidth = 20;
-const GridArray = [10,10]
 
-
-function createGrid(array) {
+function createGrid(array,rebaseWidth = 20) {
   let [xGrid,yGrid] = array
   canvas.width = xGrid*rebaseWidth;
   canvas.height = yGrid*rebaseWidth;
@@ -16,5 +14,4 @@ function createGrid(array) {
   }
 }
 
-createGrid(GridArray);
-
+export {createGrid}

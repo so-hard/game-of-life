@@ -12,12 +12,19 @@
     "jest": "^24.8.0"
   },
   "scripts": {
-    "test": "jest"
-
+    "test": "jest",
+    "serve": "webpack-dev-server",
+    "bulid": "webpack"
   },
   "jest": {
     "transform": {
       "^.+\\.js$": "babel-jest"
     }
+  },
+  "devDependencies": {
+    "babel-loader": "8.0.0-beta.0",
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.4",
+    "webpack-dev-server": "^3.7.1"
   }
 }
