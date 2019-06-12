@@ -7,9 +7,9 @@ class Board {
         this.grid = [];
         this.liveNum = num
 
-
     }
 
+        //初始化grid数组
     grid_init() {
         let [n, m] = this.size
         let statusList = this.shuffle()
@@ -81,7 +81,7 @@ class Board {
             }
         }
         this.grid = newGrid
-        console.log(this.grid)
+        // console.log(this.grid)
         this.draw()
     }
 
