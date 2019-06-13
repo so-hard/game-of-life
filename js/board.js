@@ -1,23 +1,25 @@
 import Cell from "./cell"
 
 class Board {
-    constructor(size, num) {
-        //size=>{n,m}
-        this.size = size;
+    constructor(arr) {
+        this.initDate = arr;
+        this.x = null;
+        this.y =null;
+        this.liveNum = null;
+        this.rebaseWidth =null
         this.grid = [];
-        this.liveNum = num
-
     }
 
+    dataInit () {
+        [this.x,this.y, this.liveNum,this.rebaseWidth] = this.initDate
+    }
         //初始化grid数组
     grid_init() {
-        let [n, m] = this.size
         let statusList = this.shuffle()
-        let k = 0
-        for (let i = 0; i < n; i++) {
+        for (let i=0,k = 0; i < this.x; i++, k++) {
             this.grid[i] = new Array();
-            for (let j = 0; j < m; j++) {
-                this.grid[i][j] = new Cell(statusList[k++], i, j);
+            for (let j = 0; j < this.y; j++) {
+                this.grid[i][j] = new Cell(statusList[k], i, j);
             }
         }
     }
@@ -26,7 +28,7 @@ class Board {
         const rebaseWidth = 20
         let canvas = document.getElementById("canvas"),
             cxt = canvas.getContext("2d");
-        let [xGrid, yGrid] = this.size
+        let [xGrid, yGrid] = [this.x,this.y]
         canvas.width = xGrid * rebaseWidth;
         canvas.height = yGrid * rebaseWidth;
         for (let i = 0; i < xGrid; i++) {
@@ -46,7 +48,7 @@ class Board {
     }
 
     shuffle() {
-        let len = this.size[0] * this.size[1]
+        let len = this.x * this.y
         let arr = Array(len).fill(0, 0, len)
         for (let r = 0; r < this.liveNum; r++) {
             arr[r] = 1
@@ -61,16 +63,15 @@ class Board {
 
 
     update() {
-        let [n, m] = this.size
         let newGrid = []
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < this.x; i++) {
             newGrid[i] = []
-            for (let j = 0; j < m; j++) {
+            for (let j = 0; j < this.y; j++) {
                 newGrid[i][j] = new Cell(this.grid[i][j].status, i, j);
             }
         }
-        for (let i = 0; i < n; i++) {
-            for (let j = 0; j < m; j++) {
+        for (let i = 0; i < this.x; i++) {
+            for (let j = 0; j < this.y; j++) {
                 status = this.getNewStatus(i, j)
                 if (status == 1) {
                     newGrid[i][j].setAlive()
@@ -86,7 +87,7 @@ class Board {
     }
 
     getNewStatus(i, j) {
-        let [n, m] = this.size
+        let [n, m] = [this.x,this.y]
         let num_alive = 0;
         if (i - 1 > 0 && j - 1 > 0) {
             if (this.grid[i - 1][j - 1].status == 1) {

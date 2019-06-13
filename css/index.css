@@ -1,0 +1,83 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+body #warning {
+  transform: translate(-50%, -50%);
+}
+body .warning {
+  text-align: center;
+  line-height: 50px;
+  font-size: 14px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -340px);
+  height: 50px;
+  width: 150px;
+  background: #fff;
+  box-shadow: 0 1px 5px 5px rgba(0,0,0,0.1);
+  color: #f00;
+  transition: all 0.5s;
+}
+body .warning .waring_span {
+  display: block;
+  line-height: 10px;
+  position: absolute;
+  cursor: pointer;
+  right: 0;
+  top: 0;
+}
+body canvas {
+  transition: all 0.5s;
+}
+body #control_up {
+  transform: translateY(-336px);
+}
+body .control {
+  transition: all 0.5s;
+  position: fixed;
+  top: 0;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+}
+body .control .but {
+  display: flex;
+  justify-content: space-around;
+  margin: 5px 0;
+}
+body .control .but span {
+  background: #fff;
+  text-align: center;
+  line-height: 20px;
+  font-size: 15px;
+  height: 20px;
+  width: 40px;
+  display: block;
+  padding: 5px;
+  cursor: pointer;
+  box-shadow: 0 1px 1px 1px rgba(0,0,0,0.1);
+  transition: all 0.5s;
+}
+body .control .but span:hover {
+  box-shadow: 0 2px 10px 2px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+}
+body .control .but span:active {
+  box-shadow: none;
+  transition: all 0.1s;
+}
+body .control .but input {
+  margin: 10px 10px;
+  outline-style: none;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 5px;
+  width: 80px;
+  transition: all 0.5s;
+}
+body .control .but input:focus {
+  box-shadow: 0 1px 5px 5px rgba(0,0,0,0.1);
+}
