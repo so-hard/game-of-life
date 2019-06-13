@@ -23,7 +23,11 @@ control.startAction().then((gridData)=> {
   }
 })
 
-control.resetAction()
+control.resetAction().then((data) => {
+    board.dataInit(data)
+    board.gridInit()
+    board.draw()
+})
 
 
 

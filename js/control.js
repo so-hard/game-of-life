@@ -80,6 +80,8 @@ class Control {
     inputs.forEach((val) => {
         val.value = '';
     })
+    this.gridData = [0,0,0,0]
+    // retrun this.gridData
   }
 
   getGridData(data) {
@@ -95,9 +97,7 @@ class Control {
   startAction() {
     return new Promise ((res, rej)=> {
       this.startBut.addEventListener('click', function(){
-        if(this.gridData.length != 0){
-          this.gridData = []
-        }
+        
         let gridData = this.getGridData()
         res(gridData)
       }.bind(this))
@@ -106,11 +106,14 @@ class Control {
   }
 
   resetAction() {
+    return new Promise((res,rej) => {
       this.resetBut.addEventListener('click',
       () => {
         this.resetGridData();
-        this.gridData = []
+        res([0,0,0,0])
       })
+    })
+      
 
   }
 
