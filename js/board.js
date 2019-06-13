@@ -6,7 +6,7 @@ class Board {
         this.x = null;
         this.y =null;
         this.liveNum = null;
-        this.rebaseWidth =null
+        this.rebaseWidth =null;
         this.grid = [];
     }
 
@@ -70,6 +70,7 @@ class Board {
                 newGrid[i][j] = new Cell(this.grid[i][j].status, i, j);
             }
         }
+        let status;
         for (let i = 0; i < this.x; i++) {
             for (let j = 0; j < this.y; j++) {
                 status = this.getNewStatus(i, j)
@@ -83,28 +84,28 @@ class Board {
         }
         this.grid = newGrid
         // console.log(this.grid)
-        this.draw()
+        // this.draw()
     }
 
     getNewStatus(i, j) {
         let [n, m] = [this.x,this.y]
         let num_alive = 0;
-        if (i - 1 > 0 && j - 1 > 0) {
+        if (i - 1 >= 0 && j - 1 >= 0) {
             if (this.grid[i - 1][j - 1].status == 1) {
                 num_alive++
             }
         }
-        if (i - 1 > 0) {
+        if (i - 1 >= 0) {
             if (this.grid[i - 1][j].status == 1) {
                 num_alive++
             }
         }
-        if (i - 1 > 0 && j + 1 < m) {
+        if (i - 1 >= 0 && j + 1 < m) {
             if (this.grid[i - 1][j + 1].status == 1) {
                 num_alive++
             }
         }
-        if (j - 1 > 0) {
+        if (j - 1 >= 0) {
             if (this.grid[i][j - 1].status == 1) {
                 num_alive++
             }
@@ -114,7 +115,7 @@ class Board {
                 num_alive++
             }
         }
-        if (i + 1 < n && j - 1 > 0) {
+        if (i + 1 < n && j - 1 >= 0) {
             if (this.grid[i + 1][j - 1].status == 1) {
                 num_alive++
             }
@@ -124,7 +125,7 @@ class Board {
                 num_alive++
             }
         }
-        if (i + 1 > n && j + 1 > m) {
+        if (i + 1 < n && j + 1 < m) {
             if (this.grid[i + 1][j + 1].status == 1) {
                 num_alive++
             }
