@@ -74,27 +74,31 @@ class Control {
   }
 
     //获取表单的数据
+
+  resetGridData(){
+    let inputs = Array.from(this.inputs);
+    inputs.forEach((val) => {
+        val.value = '';
+    })
+  }
+
   getGridData(data) {
     // console.log(data)
     let inputs = Array.from(this.inputs);
     console.log(inputs)
     inputs.forEach((val) => {
-      if(data == ''){
-        val.value = ''
-      }else{
         this.gridData.push(val.value)
-      }
     });
     return  this.gridData
-
-    
-   
   }
 
   startAction() {
     return new Promise ((res, rej)=> {
       this.startBut.addEventListener('click', function(){
-        const gridData = this.getGridData()
+        if(this.gridData.length != 0){
+          this.gridData = []
+        }
+        let gridData = this.getGridData()
         res(gridData)
       }.bind(this))
     }) 
@@ -102,17 +106,14 @@ class Control {
   }
 
   resetAction() {
-    this.resetBut.addEventListener('click',function(){
-      this.returnGridData('')
-      this.gridData = []
-    }.bind(this))
+      this.resetBut.addEventListener('click',
+      () => {
+        this.resetGridData();
+        this.gridData = []
+      })
+
   }
-  // controlAciton() {
-  //   window.addEventListener('mousewheel', this.debounce(event,this.control,this.controlAciton))
-  // }
-  returnGridData(){
-    return this.gridData
-  }
+
   
 }
 

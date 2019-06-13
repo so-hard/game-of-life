@@ -6,15 +6,29 @@ class Board {
         this.y = null;
         this.liveNum = null;
         this.rebaseWidth = null;
+        this.flag = null;
         this.grid = [];
     }
 
     dataInit(arr) {
-        [this.x, this.y, this.liveNum, this.rebaseWidth] = arr
+        [this.x, this.y,  this.rebaseWidth,this.liveNum,] = arr
     }
 
+
+    startAnimation() {
+        this.flag = setInterval(
+            ()=> {
+                this.update()
+            },50
+        )
+    }
+
+    stopAnimation(){
+        clearInterval(this.flag)
+        this.flag = null;
+    }
     //初始化grid数组
-    grid_init() {
+    gridInit() {
         let statusList = this.shuffle()
         let k = 0;
         for (let i = 0; i < this.x; i++) {
@@ -69,9 +83,9 @@ class Board {
             newGrid[i] = []
             for (let j = 0; j < this.y; j++) {
                 newGrid[i][j] = new Cell(this.grid[i][j].status, i, j);
-            }
+            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
         }
-        let status;
+        let status;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
         for (let i = 0; i < this.x; i++) {
             for (let j = 0; j < this.y; j++) {
                 status = this.getNewStatus(i, j)

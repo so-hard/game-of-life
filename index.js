@@ -10,13 +10,32 @@ const data = []
 control.init()
 
 
-control.startAction().then((gridDate)=> {
-  console.log(gridDate)
-  board.dataInit(gridDate)
-  board.grid_init()
+control.startAction().then((gridData)=> {
+  // console.log(gridData)
+  board.dataInit(gridData)
+  board.gridInit()
   board.draw()
+  console.log(board.flag)
+  if(board.flag == null ){
+    board.startAnimation()
+  }else{
+    board.stopAnimation()
+  }
 })
 
+control.resetAction()
+
+
+
+// setInterval(
+//   ()=> {
+//     board.update()
+//   },500
+// )
+
+
+
+// control.resetAction()
 
 
 // board.dataInit()
@@ -24,7 +43,6 @@ control.startAction().then((gridDate)=> {
 // board.startAnmation()
 
 // control.startAction()
-// control.resetAction()
 
 
 
