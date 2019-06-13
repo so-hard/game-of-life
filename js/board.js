@@ -4,22 +4,24 @@ class Board {
     constructor(arr) {
         this.initDate = arr;
         this.x = null;
-        this.y =null;
+        this.y = null;
         this.liveNum = null;
-        this.rebaseWidth =null;
+        this.rebaseWidth = null;
         this.grid = [];
     }
 
-    dataInit () {
-        [this.x,this.y, this.liveNum,this.rebaseWidth] = this.initDate
+    dataInit() {
+        [this.x, this.y, this.liveNum, this.rebaseWidth] = this.initDate
     }
-        //初始化grid数组
+
+    //初始化grid数组
     grid_init() {
         let statusList = this.shuffle()
-        for (let i=0,k = 0; i < this.x; i++, k++) {
+        let k = 0;
+        for (let i = 0; i < this.x; i++) {
             this.grid[i] = new Array();
             for (let j = 0; j < this.y; j++) {
-                this.grid[i][j] = new Cell(statusList[k], i, j);
+                this.grid[i][j] = new Cell(statusList[k++], i, j);
             }
         }
     }
@@ -28,7 +30,7 @@ class Board {
         const rebaseWidth = 20
         let canvas = document.getElementById("canvas"),
             cxt = canvas.getContext("2d");
-        let [xGrid, yGrid] = [this.x,this.y]
+        let [xGrid, yGrid] = [this.x, this.y]
         canvas.width = xGrid * rebaseWidth;
         canvas.height = yGrid * rebaseWidth;
         for (let i = 0; i < xGrid; i++) {
@@ -84,11 +86,11 @@ class Board {
         }
         this.grid = newGrid
         // console.log(this.grid)
-        // this.draw()
+        this.draw()
     }
 
     getNewStatus(i, j) {
-        let [n, m] = [this.x,this.y]
+        let [n, m] = [this.x, this.y]
         let num_alive = 0;
         if (i - 1 >= 0 && j - 1 >= 0) {
             if (this.grid[i - 1][j - 1].status == 1) {
