@@ -4,25 +4,27 @@ import Control from "./js/control"
 
 import './css/index.css'
 
-
-
-const GridArray = [50, 50,400,20]
-
-let board = new Board(GridArray)
 let control = new Control()
-board.dataInit()
-board.grid_init()
-board.draw()
-setInterval(
-  () => {
-    board.update()
-  }
-  , 50
-)
-
+let board = new Board()
+const data = []
 control.init()
-control.startAction()
-control.resetAction()
+
+
+control.startAction().then((gridDate)=> {
+  console.log(gridDate)
+  board.dataInit(gridDate)
+  board.grid_init()
+  board.draw()
+})
+
+
+
+// board.dataInit()
+
+// board.startAnmation()
+
+// control.startAction()
+// control.resetAction()
 
 
 

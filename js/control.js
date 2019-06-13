@@ -1,5 +1,5 @@
 class Control {
-  constructor(data) {
+  constructor() {
     this.inputs = null
     this.startBut = null
     this.resetBut = null
@@ -12,7 +12,7 @@ class Control {
 
   init() {
     let control = document.getElementsByClassName('control')[0];
-    this.inputs = control.getElementsByTagName('input');
+    this.inputs = control.querySelectorAll('input');
     this.startBut = control.getElementsByClassName('start_but')[0];
     this.resetBut = control.getElementsByClassName('reset_but')[0];
     this.waring = control.getElementsByClassName('warning')[0];
@@ -20,13 +20,13 @@ class Control {
     console.log(this.control)
   }
   //返回属性
-  returnData() {
-    if (this.checkoutData()) {
-      this.init()
-    }
-    this.checkoutData(this.gridData)
-    return [this.inputs, this.startBut, this.resetBut, this.control,this.gridData]
-  }
+  // returnData() {
+  //   if (this.checkoutData()) {
+  //     this.init()
+  //   }
+  //   this.checkoutData(this.gridData)
+  //   return [this.inputs, this.startBut, this.resetBut, this.control,this.gridData]
+  // }
 
   //初始化 warning组件
   waringInit() {
@@ -74,24 +74,31 @@ class Control {
   }
 
     //获取表单的数据
-  returnGridData(data) {
-    console.log(data)
-    let inputs = new Set(this.inputs);
+  getGridData(data) {
+    // console.log(data)
+    let inputs = Array.from(this.inputs);
+    console.log(inputs)
     inputs.forEach((val) => {
       if(data == ''){
-        val.value = data
+        val.value = ''
       }else{
         this.gridData.push(val.value)
       }
     });
-   console.log(this.gridData)
+    return  this.gridData
+
+    
+   
   }
 
   startAction() {
-    this.startBut.addEventListener('click', function(){
-      this.returnGridData()
-      // console,log(this.resetBut)
-    }.bind(this))
+    return new Promise ((res, rej)=> {
+      this.startBut.addEventListener('click', function(){
+        const gridData = this.getGridData()
+        res(gridData)
+      }.bind(this))
+    }) 
+
   }
 
   resetAction() {
@@ -103,10 +110,10 @@ class Control {
   // controlAciton() {
   //   window.addEventListener('mousewheel', this.debounce(event,this.control,this.controlAciton))
   // }
+  returnGridData(){
+    return this.gridData
+  }
   
-
-  
-
 }
 
 export default Control

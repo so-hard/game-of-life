@@ -1,8 +1,7 @@
 import Cell from "./cell"
 
 class Board {
-    constructor(arr) {
-        this.initDate = arr;
+    constructor() {
         this.x = null;
         this.y = null;
         this.liveNum = null;
@@ -10,8 +9,8 @@ class Board {
         this.grid = [];
     }
 
-    dataInit() {
-        [this.x, this.y, this.liveNum, this.rebaseWidth] = this.initDate
+    dataInit(arr) {
+        [this.x, this.y, this.liveNum, this.rebaseWidth] = arr
     }
 
     //初始化grid数组

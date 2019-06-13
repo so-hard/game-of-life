@@ -1,6 +1,6 @@
-body
-  display: flex
-  flex-direction: column
+  canvas 
+    display: block
+    transition:  all 0.5s
   #warning
     transform: translate(-50%,-50%)
   .warning
@@ -25,14 +25,14 @@ body
       cursor pointer
       right 0
       top 0
-  canvas 
-    transition:  all 0.5s
   #control_up
-    transform: translateY(-336px)
+    transform: translate(-50%,-336px)
   .control 
     transition:  all 0.5s
     position: fixed
     top 0
+    left 50%
+    transform: translate(-50%,0)
     align-self: center
     display: flex
     flex-direction: column
