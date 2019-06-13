@@ -1,10 +1,9 @@
 import Cell from "../js/cell"
 import Board from "../js/board"
 
-let board = new Board([3,3, 1,20]);
-
+let board = new Board();
+let data = [3,3, 1,20];
 let obj = {
-    initDate:[3,3,1,20],
     x:3,
     y:3,
     grid: [],
@@ -13,7 +12,7 @@ let obj = {
 
 };
 let cell = new Cell(0, 0, 0);
-board.dataInit()
+board.dataInit(data)
 
 test('board create', () => {
     expect(board).toEqual(obj);
