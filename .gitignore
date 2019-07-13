@@ -1,7 +1,5 @@
 node_modules
-.log
-.lock
-.idea/
-package-lock.json
-dist/
+*.log
+*.lock
+dist
 
