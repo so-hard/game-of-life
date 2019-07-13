@@ -4,12 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>game of life</title>
+  <title>Document</title>
 </head>
 <body>
-    <canvas id="canvas" style="margin: 0 auto; display: block" >
-
-    </canvas>
+  
+    <section class="control">
+        <div class="warning">
+            请填写完整参数
+            <span class="waring_span">×</span>
+          </div>
+        <div class="inputs but">
+            <input type="text" name="x" placeholder="x">
+            <input type="text" name="y" placeholder="y">
+            <input type="text" name="gridWith" placeholder="gridWith">
+            <input type="text" name="initCellNum" placeholder="liveCellNum" >
+        </div>
+        <div class="but">
+            <span class="start_but">start</span>
+              <span class="reset_but">
+                reset
+              </span>
+        </div>
+      </section>
+  <canvas id="canvas">
+  </canvas>
+  
 </body>
-<script type="module" src="./dist/bundle.js"></script>
 </html>

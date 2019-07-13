@@ -14,5 +14,7 @@ class Cell{
     }
 }
 
+
+
 // let cell = new Cell(0, 0, 0);
 export default Cell;

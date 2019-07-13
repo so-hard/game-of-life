@@ -6,57 +6,87 @@ class Board {
         this.y = null;
         this.liveNum = null;
         this.rebaseWidth = null;
-        this.flag = null;
+        this.timer = null;
         this.grid = [];
+        this.canvas = document.getElementById("canvas");;
+        this.cxt = this.canvas.getContext("2d");;
     }
 
     dataInit(arr) {
-        [this.x, this.y,  this.rebaseWidth,this.liveNum,] = arr
+        [this.x, this.y, this.rebaseWidth, this.liveNum] = arr
     }
 
+    start() {
+        return ({ data, reset }, signal) => {
+            console.log()
+            switch (reset) {
+                case true:
+                    this.dataInit(data)
+                    this.gridInit()
+                    this.draw()
+                    this.startAnimation()
+                    break
+                case false:
+                    if (signal == "start") {
+                        this.startAnimation()
+                    }else{
+                        this.stopAnimation()
+                    }
+                    break
+            }
+        }
+    }
+
+    reset() {
+        return (data) => {
+            //清空计时器
+            // 清空canvas
+            this.stopAnimation()
+            this.dataInit(data)
+            this.gridInit()
+            this.draw()
+        }
+    }
 
     startAnimation() {
-        this.flag = setInterval(
-            ()=> {
+        this.timer = setInterval(
+            () => {
+                // console.log(1)
                 this.update()
-            },50
+                this.draw()
+            }, 50
         )
     }
 
-    stopAnimation(){
-        clearInterval(this.flag)
-        this.flag = null;
+    stopAnimation() {
+        // console.log(22)
+        clearInterval(this.timer)
+        this.timer = null
     }
     //初始化grid数组
     gridInit() {
         let statusList = this.shuffle()
-        let k = 0;
         for (let i = 0; i < this.x; i++) {
             this.grid[i] = new Array();
             for (let j = 0; j < this.y; j++) {
-                this.grid[i][j] = new Cell(statusList[k++], i, j);
+                this.grid[i][j] = new Cell(statusList[i * this.x + j], i, j);
             }
         }
     }
 
     draw() {
-        const rebaseWidth = 20
-        let canvas = document.getElementById("canvas"),
-            cxt = canvas.getContext("2d");
+        const rebaseWidth = this.rebaseWidth
+        let [canvas, cxt] = [this.canvas, this.cxt]
         let [xGrid, yGrid] = [this.x, this.y]
         canvas.width = xGrid * rebaseWidth;
         canvas.height = yGrid * rebaseWidth;
         for (let i = 0; i < xGrid; i++) {
             for (let j = 0; j < yGrid; j++) {
-                // let cell = new Cell(i,j,cxt)
-                // console.log(this.grid)
                 if (this.grid[i][j].status == 1) {
                     cxt.fillStyle = "#000000";
                 } else {
                     cxt.fillStyle = "#eeeeee";
                 }
-
-                // cell.init(rebaseWidth)
                 cxt.fillRect(i * rebaseWidth, j * rebaseWidth, rebaseWidth, rebaseWidth);
             }
         }
@@ -73,7 +103,6 @@ class Board {
             [arr[j], arr[len]] = [arr[len], arr[j]];
         }
         return arr
-
     }
 
 
@@ -83,9 +112,9 @@ class Board {
             newGrid[i] = []
             for (let j = 0; j < this.y; j++) {
                 newGrid[i][j] = new Cell(this.grid[i][j].status, i, j);
-            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+            }
         }
-        let status;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+        let status;
         for (let i = 0; i < this.x; i++) {
             for (let j = 0; j < this.y; j++) {
                 status = this.getNewStatus(i, j)
@@ -99,7 +128,6 @@ class Board {
         }
         this.grid = newGrid
         // console.log(this.grid)
-        this.draw()
     }
 
     getNewStatus(i, j) {

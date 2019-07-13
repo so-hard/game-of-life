@@ -1,33 +1,14 @@
 import Board from "./js/board"
 import Control from "./js/control"
+import './css/index.styl'
 
-
-import './css/index.css'
 
 let control = new Control()
 let board = new Board()
-const data = []
+
 control.init()
-
-
-control.startAction().then((gridData)=> {
-  // console.log(gridData)
-  board.dataInit(gridData)
-  board.gridInit()
-  board.draw()
-  console.log(board.flag)
-  if(board.flag == null ){
-    board.startAnimation()
-  }else{
-    board.stopAnimation()
-  }
-})
-
-control.resetAction().then((data) => {
-    board.dataInit(data)
-    board.gridInit()
-    board.draw()
-})
+control.startAction(board.start())
+control.resetAction(board.reset())
 
 
 
