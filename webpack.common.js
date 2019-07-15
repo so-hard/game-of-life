@@ -2,15 +2,16 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  //入口文件
     entry: './index.js',
 
-
+  //输出文件
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
 
-
+    // 使用本地模板
     plugins: [
         // new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
@@ -19,7 +20,7 @@ module.exports = {
 
     ],
 
-
+    //分离chunks
     optimization: {
         splitChunks: {
             chunks: 'all'
