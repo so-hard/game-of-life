@@ -1,189 +1,127 @@
 import Cell from "./cell"
+import shuffle from "lodash/shuffle"
 
 class Board {
     constructor() {
-        this.x = null;
-        this.y = null;
-        this.liveNum = null;
-        this.rebaseWidth = null;
+        this.BoardData = {
+            x : 3,
+            y :3,
+            liveCellNums : 3,
+            celldWith :10
+        }
         this.timer = null;
         this.grid = [];
-        this.canvas = document.getElementById("canvas");;
-        this.cxt = this.canvas.getContext("2d");;
+        this.statusList =  null;
+        this.canvas = document.getElementById("canvas") ;
+        //便于测试 
+        this.cxt =  this.canvas ?  this.canvas.getContext("2d") : null;
     }
 
-    dataInit(arr) {
-        [this.x, this.y, this.rebaseWidth, this.liveNum] = arr
+    /*
+    *初始化board，传data对象 =>{
+        x: 横轴细胞数量
+        y:  纵轴细胞数量
+        liveCellNums：  存活细胞数
+        celldWith： 细胞宽度
     }
-
-    start() {
-        return ({ data, reset }, signal) => {
-            console.log()
-            switch (reset) {
-                case true:
-                    this.dataInit(data)
-                    this.gridInit()
-                    this.draw()
-                    this.startAnimation()
-                    break
-                case false:
-                    if (signal == "start") {
-                        this.startAnimation()
-                    }else{
-                        this.stopAnimation()
-                    }
-                    break
-            }
-        }
+    得到x,y，liveCellNums 后可以通过getRandCellStatus方法返回一个的01数组来模拟细胞状态。
+    
+    */
+    init(data) {
+        this.BoardData = data 
+        this.gridInit()
     }
 
     reset() {
-        return (data) => {
-            //清空计时器
-            // 清空canvas
             this.stopAnimation()
-            this.dataInit(data)
-            this.gridInit()
-            this.draw()
-        }
+            // console.log(0)
+            this.canvas.width = 0
+    }
+
+    setp(){
+        this.stopAnimation()
+        this.updateCells()
     }
 
     startAnimation() {
         this.timer = setInterval(
-            () => {
-                // console.log(1)
-                this.update()
-                this.draw()
-            }, 50
+            ()=>{
+                this.updateCells()
+            }
+            , 50
         )
     }
 
     stopAnimation() {
-        // console.log(22)
         clearInterval(this.timer)
-        this.timer = null
     }
-    //初始化grid数组
-    gridInit() {
-        let statusList = this.shuffle()
-        for (let i = 0; i < this.x; i++) {
-            this.grid[i] = new Array();
-            for (let j = 0; j < this.y; j++) {
-                this.grid[i][j] = new Cell(statusList[i * this.x + j], i, j);
+
+    /*
+    默认调用getRandCellStatus方法随即生成状态数组
+    gridInit，通过双重for循环遍历来生成一个二维数组存储Cell。
+    */
+    gridInit(cellStatus = this.getRandCellStatus()) {
+        let { x, y, celldWith } = this.BoardData;
+        if(this.canvas){
+            this.canvas.width = x * celldWith + x
+            this.canvas.height = y * celldWith + y
+        }
+        this.statusList = cellStatus
+        for (let i = 0; i < x; i++) {
+            this.grid[i] = [];
+            for (let j = 0; j < y; j++) {
+                this.grid[i][j] = new Cell(cellStatus[i * y + j], i, j,this.getNeighborIndex(i,j));
+                if(this.cxt)
+                    this.grid[i][j].darwSelf(this.cxt, celldWith)
             }
         }
     }
 
-    draw() {
-        const rebaseWidth = this.rebaseWidth
-        let [canvas, cxt] = [this.canvas, this.cxt]
-        let [xGrid, yGrid] = [this.x, this.y]
-        canvas.width = xGrid * rebaseWidth;
-        canvas.height = yGrid * rebaseWidth;
-        for (let i = 0; i < xGrid; i++) {
-            for (let j = 0; j < yGrid; j++) {
-                if (this.grid[i][j].status == 1) {
-                    cxt.fillStyle = "#000000";
-                } else {
-                    cxt.fillStyle = "#eeeeee";
+    getRandCellStatus() {
+        let { x, y, liveCellNums } = this.BoardData,
+            arr = Array(x * y).fill(0).fill(1, 0, liveCellNums);
+        return shuffle(arr)
+    }
+
+    //获取相邻细胞的索引，并返回
+    getNeighborIndex(i, j) {
+        let {
+            x,
+            y,
+        } = this.BoardData,
+            arr = [];
+        [-1, 0, 1].forEach(
+            val => {
+                if (i + val >= 0 && i + val <x ) {
+                    if (j - 1 >= 0 )
+                        arr.push((i + val) * y + j - 1)
+                    if (val != 0)
+                        arr.push((i + val) * y + j)
+                    if (j + 1 <= y - 1 )
+                        arr.push((i + val) * y + j + 1)
                 }
-                cxt.fillRect(i * rebaseWidth, j * rebaseWidth, rebaseWidth, rebaseWidth);
-            }
-        }
+            });
+        return arr 
     }
 
-    shuffle() {
-        let len = this.x * this.y
-        let arr = Array(len).fill(0, 0, len)
-        for (let r = 0; r < this.liveNum; r++) {
-            arr[r] = 1
+    //遍历this.grid时调用cell.updataStatus以及cell.darwwSelf更新canvas。
+    updateCells() {
+        let {
+            x,y,celldWith
+        } = this.BoardData,
+        shadowStatusLists = [];
+        for(let i = 0; i < x; i++){
+            for(let j = 0; j < y; j++){
+                //调用updataStatus会返回自身的状态，将更新后的状态存储起来，然后赋值给statusList
+                shadowStatusLists[i*y+ j] = this.grid[i][j].updataStatus(this.statusList)
+                if(this.cxt)
+                    this.grid[i][j].darwSelf(this.cxt,celldWith)
+            }
         }
-        while (len) {
-            let j = Math.floor(Math.random() * len--);
-            [arr[j], arr[len]] = [arr[len], arr[j]];
-        }
-        return arr
+        this.statusList = shadowStatusLists
     }
 
 
-    update() {
-        let newGrid = []
-        for (let i = 0; i < this.x; i++) {
-            newGrid[i] = []
-            for (let j = 0; j < this.y; j++) {
-                newGrid[i][j] = new Cell(this.grid[i][j].status, i, j);
-            }
-        }
-        let status;
-        for (let i = 0; i < this.x; i++) {
-            for (let j = 0; j < this.y; j++) {
-                status = this.getNewStatus(i, j)
-                if (status == 1) {
-                    newGrid[i][j].setAlive()
-                }
-                if (status == 0) {
-                    newGrid[i][j].setDead()
-                }
-            }
-        }
-        this.grid = newGrid
-        // console.log(this.grid)
-    }
-
-    getNewStatus(i, j) {
-        let [n, m] = [this.x, this.y]
-        let num_alive = 0;
-        if (i - 1 >= 0 && j - 1 >= 0) {
-            if (this.grid[i - 1][j - 1].status == 1) {
-                num_alive++
-            }
-        }
-        if (i - 1 >= 0) {
-            if (this.grid[i - 1][j].status == 1) {
-                num_alive++
-            }
-        }
-        if (i - 1 >= 0 && j + 1 < m) {
-            if (this.grid[i - 1][j + 1].status == 1) {
-                num_alive++
-            }
-        }
-        if (j - 1 >= 0) {
-            if (this.grid[i][j - 1].status == 1) {
-                num_alive++
-            }
-        }
-        if (j + 1 < m) {
-            if (this.grid[i][j + 1].status == 1) {
-                num_alive++
-            }
-        }
-        if (i + 1 < n && j - 1 >= 0) {
-            if (this.grid[i + 1][j - 1].status == 1) {
-                num_alive++
-            }
-        }
-        if (i + 1 < n) {
-            if (this.grid[i + 1][j].status == 1) {
-                num_alive++
-            }
-        }
-        if (i + 1 < n && j + 1 < m) {
-            if (this.grid[i + 1][j + 1].status == 1) {
-                num_alive++
-            }
-        }
-
-        //rule
-        if (num_alive == 3) {
-            return 1
-        } else if (num_alive == 2) {
-            return -1
-        } else {
-            return 0
-        }
-
-    }
 }
 
 export default Board;

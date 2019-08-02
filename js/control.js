@@ -1,109 +1,109 @@
-import _ from 'lodash/core'
 class Control {
-  constructor() {
-    this.inputs = null
-    this.startBut = null
-    this.resetBut = null
-    this.control = null
-    this.waring = null
-    this.width = null
-    this.gridData = []
+  constructor(bord) {
+    // 获取ControlDom
+    this.ControlDom = document.getElementsByClassName('control')[0];
+    // 每个组件
+    this.ControlComponents = new Map();
+    // inputs里面的数据
+    this.inputDatas = {}
+    //需要一个convas 画板
+    this.bord = bord
+    // 用来判断时候初始化 `board`
+    this.isboaedInit = 0;
   }
 
+  //初始化dom数据
   init() {
-    let control = document.getElementsByClassName('control')[0];
-    this.startBut = control.getElementsByClassName('start_but')[0];
-    this.resetBut = control.getElementsByClassName('reset_but')[0];
-    this.waring = control.getElementsByClassName('warning')[0];
-    this.control = control;
-    console.log(this.control)
+    this.setControlComponents('inputs')
+    this.setControlComponents('startBut', 'start_but')
+    this.setControlComponents('stopBut', 'reset_but')
+    this.setControlComponents('stepBut', 'step_but')
+    this.setControlComponents('layer')
+    this.startAction()
+    this.resetAciton()
+    this.stepAction()
+    // window.addEventListener('mousewheel',  event => {
+    //   if (event.wheelDelta < 0) {
+    //     this.ControlDom.setAttribute('id', "up")
+    //     this.bord.canvas.setAttribute('id',"up")
+    //   } else {
+    //     if (this.ControlDom.getAttribute('id') == "up") {
+    //       this.ControlDom.removeAttribute('id')
+    //       this.bord.canvas.removeAttribute('id',"up")
+    //     }
+    //   }
+    // })
   }
 
-  //初始化 warning组件
-  // waringInit() {
-  //   let waringOut = this.waring.getElementsByTagName('span')[0];
-  //   waringOut.onclick = () => {
-  //     this.waring.removeAttribute('id')
-  //   }
-  // }
-  //检查表单数据
-  checkoutData(data = 0) {
-    switch (data == 0) {
-      case true:
-        if (this.inputs == null || this.startBut == null || this.resetBut == null || this.control == null) {
-          return 0
-        }
-        break;
-      case false:
-        console.log(data)
-        if (data.length == 0) {
-          retrun
-        }
-        data.forEach(
-          val => {
-            if (val == '') {
-              console.log(this.waring)
-              this.waring.setAttribute('id', 'warning');
-              this.waringInit()
-            }
-          }
-        )
-        break
+  //向map中添加dom
+  setControlComponents(name, targ = name) {
+    let targDom = this.ControlDom.getElementsByClassName(targ)[0];
+    targDom = targDom.children.length > 1 ? targDom.children : targDom;
+    this.ControlComponents.set(name, targDom)
+  }
+
+  getControlComponent(name) {
+    return this.ControlComponents.get(name)
+  }
+
+  setInputDatas() {
+    //获取input htmlColection,遍历得到key，
+    let inputs = this.getControlComponent('inputs');
+    for (const input of inputs) {
+      let [key, value] = [input.name, Number(input.value)]
+      this.inputDatas[key] = value
     }
   }
 
-  getInputs() {
-    this.inputs = this.control.querySelectorAll('input')
-  }
-  resetGridData() {
-    let inputs = Array.from(this.inputs);
-    inputs.forEach((val) => {
-      val.value = '';
-    })
-    return this.gridData = [0, 0, 0, 0]
-  }
-
-
-  //获取表单的数据
-  getGridData() {
-    let newGridData,
-      reset;
-    this.getInputs();
-    newGridData = [...this.inputs].map((val) => {
-      // 往数data里添加数据
-      return val.value
-    });
-    //判断数据是否变化
-    reset = !_.isEqual(newGridData, this.gridData)
-    this.gridData = newGridData
-    return {
-      data: this.gridData,
-      reset
+  // 检查表单数据
+  checkInputData() {
+    let {
+      x,
+      y,
+      liveCellNums
+    } = this.inputDatas
+    if (x * y < liveCellNums) {
+      console.log(`the livenum is over`)
     }
   }
 
-
-/*
-点击开始按钮获取按钮的文本
-
-
-*/
-  startAction(fun) {
-    let signal;
-    this.startBut.addEventListener('click', () => {
-      signal = this.startBut.innerHTML
-      this.startBut.innerHTML = this.startBut.innerHTML === "start" ? "pause" : "start"
-      fun(this.getGridData(), signal)
+  resetAciton() {
+    let resetBut = this.getControlComponent('stopBut');
+    let startBut = this.getControlComponent('startBut');
+    resetBut.addEventListener('click', () => {
+      startBut.innerHTML = "start"
+      this.isboaedInit = 0
+      this.bord.reset()
     })
   }
 
-  resetAction(fun) {
-    this.resetBut.addEventListener('click', () => {
-      this.startBut.innerHTML = "start"
-      fun(this.resetGridData())
+  startAction() {
+    let startBut = this.getControlComponent('startBut');
+    startBut.addEventListener('click', () => {
+      if (startBut.innerHTML === "start") {
+        startBut.innerHTML = "pause"
+        if (this.isboaedInit == 0) {
+          this.isboaedInit += 1
+          this.setInputDatas()
+          this.bord.init(this.inputDatas)
+        }
+        this.bord.startAnimation()
+      } else {
+        startBut.innerHTML = "start"
+        this.bord.stopAnimation()
+      }
     })
   }
 
+  stepAction(){
+    let stepBut = this.getControlComponent('stepBut');
+    let startBut = this.getControlComponent('startBut');
+
+    stepBut.addEventListener('click', ()=> {
+      this.bord.setp()
+      startBut.innerHTML = "start"
+    })
+  }
 
 }
 

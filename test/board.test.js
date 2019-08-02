@@ -1,156 +1,57 @@
-import Cell from "../js/cell"
-import Board from "../js/board"
+import  Board from './../js/board'
 
-let board = new Board();
-let data = [3, 3, 1, 20];
+let board = new Board(),
+    testList = [];
 
-let cell = new Cell(0, 0, 0);
-board.dataInit(data)
-
-// test('board create', () => {
-//     expect(board).toEqual(obj);
-// });
-
-test('board init', () => {
-
-    board.gridInit();
-    expect(board.grid.length).toBe(3);
+board.init({
+    x: 3,
+    y: 3
 });
 
-test('board update1', () => {
+board.gridInit([1,1,0,1,1,0,0,0])
 
-    let old_state = [1, 0, 1, 1, 0, 1, 0, 1, 0]
-    let next_state = [0, 0, 0, 1, 0, 1, 0, 1, 0]
-    let k = 0
-    for (let i = 0; i < 3; i++) {
-        board.grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            board.grid[i][j] = new Cell(old_state[k++], i, j)
-        }
-    }
-    let except_update_grid = []
-    let k2 = 0
-    for (let i = 0; i < 3; i++) {
-        except_update_grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            except_update_grid[i][j] = new Cell(next_state[k2++], i, j)
-        }
-    }
-    board.update()
-    expect(board.grid).toEqual(except_update_grid);
+testList.push({
+    methodName: "getNeighborIndex",
+    desCript: "test center cell neiborIndex",
+    param:[1,1],
+    expectData: [0,1,2,3,5,6,7,8]
+})
+
+testList.push({
+    methodName: "getNeighborIndex",
+    desCript: "test [0，0] cell neiborIndex",
+    param:[0,0],
+    expectData: [1,3,4]
+})
+
+testList.push({
+    methodName: "getNeighborIndex",
+    desCript: "test [2，2] cell neiborIndex",
+    param:[2,2],
+    expectData: [4,5,7]
+})
+
+testList.push({
+    methodName: "updateCells",
+    desCript: "test the status after cell`s status update",
+    param: [],
+    testData: board.statusList,
+    expectData: [1,1,0,1,1,0,0,0]
 })
 
 
-test('board update2', () => {
-    let old_state = [1, 0, 1, 1, 0, 1, 1, 1, 0]
-    let next_state = [0, 0, 0, 1, 0, 1, 1, 1, 0]
-    let k = 0
-    for (let i = 0; i < 3; i++) {
-        board.grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            board.grid[i][j] = new Cell(old_state[k++], i, j)
+
+testList.forEach((val)=> {
+    test(val.desCript,()=> {
+        let testData;
+        if(val.testData ){
+            board[val.methodName]()
+            testData = val.testData
+        }else{
+            testData = board[val.methodName](...val.param)
         }
-    }
-    let except_update_grid = []
-    let k2 = 0
-    for (let i = 0; i < 3; i++) {
-        except_update_grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            except_update_grid[i][j] = new Cell(next_state[k2++], i, j)
-        }
-    }
-    board.update()
-    expect(board.grid).toEqual(except_update_grid);
+        expect(testData).toEqual(val.expectData)
+    })
 })
 
-test('board update3', () => {
-    let old_state = [0, 1, 1, 0, 1, 0, 0, 1, 1]
-    let next_state = [0, 1, 1, 1, 0, 0, 0, 1, 1]
-    let k = 0
-    for (let i = 0; i < 3; i++) {
-        board.grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            board.grid[i][j] = new Cell(old_state[k++], i, j)
-        }
-    }
-    let except_update_grid = []
-    let k2 = 0
-    for (let i = 0; i < 3; i++) {
-        except_update_grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            except_update_grid[i][j] = new Cell(next_state[k2++], i, j)
-        }
-    }
-    board.update()
 
-    expect(board.grid).toEqual(except_update_grid);
-})
-
-test('board update4', () => {
-    let old_state = [0, 1, 1, 1, 0, 0, 0, 1, 1]
-    let next_state = [0, 1, 0, 1, 0, 0, 0, 1, 0]
-    let k = 0
-    for (let i = 0; i < 3; i++) {
-        board.grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            board.grid[i][j] = new Cell(old_state[k++], i, j)
-        }
-    }
-    let except_update_grid = []
-    let k2 = 0
-    for (let i = 0; i < 3; i++) {
-        except_update_grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            except_update_grid[i][j] = new Cell(next_state[k2++], i, j)
-        }
-    }
-    board.update()
-
-    expect(board.grid).toEqual(except_update_grid);
-})
-
-test('board update5', () => {
-    let old_state = [0, 1, 0, 1, 0, 0, 0, 1, 0]
-    let next_state = [0, 0, 0, 1, 1, 0, 0, 0, 0]
-    let k = 0
-    for (let i = 0; i < 3; i++) {
-        board.grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            board.grid[i][j] = new Cell(old_state[k++], i, j)
-        }
-    }
-    let except_update_grid = []
-    let k2 = 0
-    for (let i = 0; i < 3; i++) {
-        except_update_grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            except_update_grid[i][j] = new Cell(next_state[k2++], i, j)
-        }
-    }
-    board.update()
-
-    expect(board.grid).toEqual(except_update_grid);
-})
-
-test('board update5', () => {
-    let old_state = [0, 0, 0, 1, 1, 0, 0, 0, 0]
-    let next_state = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    let k = 0
-    for (let i = 0; i < 3; i++) {
-        board.grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            board.grid[i][j] = new Cell(old_state[k++], i, j)
-        }
-    }
-    let except_update_grid = []
-    let k2 = 0
-    for (let i = 0; i < 3; i++) {
-        except_update_grid[i] = []
-        for (let j = 0; j < 3; j++) {
-            except_update_grid[i][j] = new Cell(next_state[k2++], i, j)
-        }
-    }
-    board.update()
-
-    expect(board.grid).toEqual(except_update_grid);
-})
