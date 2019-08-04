@@ -25,7 +25,6 @@ class Board {
         celldWith： 细胞宽度
     }
     得到x,y，liveCellNums 后可以通过getRandCellStatus方法返回一个的01数组来模拟细胞状态。
-    
     */
     init(data) {
         this.BoardData = data 
@@ -33,9 +32,12 @@ class Board {
     }
 
     reset() {
+        let {
+            x,y
+        } = this.BoardData
             this.stopAnimation()
             // console.log(0)
-            this.canvas.width = 0
+            this.gridInit(new Array(x*y).fill(0))
     }
 
     setp(){
