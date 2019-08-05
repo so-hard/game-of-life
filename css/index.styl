@@ -3,21 +3,19 @@ canvas
   margin: 0 auto
   transition:  all 0.5s
 .layer
-  display: none
+  // display: none
+  user-select none
   text-align: center
   line-height: 50px
   font-size: 14px
-  position fixed  
+  position absolute  
   top: 50%
   left 50%
-  // transform: translate(-50%,-340px)
-  // height 2vw 
-  // width: 5vw
+  transform: translate(-50%,-50%)
   background: #fff
   box-shadow: 0 1px 5px 5px rgba(0, 0, 0, 0.1)
-  // color: red
   transition: all 0.5s
-  .waring_span
+  .layer_close
     display: block
     line-height: 10px
     position absolute
@@ -25,12 +23,12 @@ canvas
     right 0
     top 0
 
+
+
 #up
     transform: translateY(-100px)
-    // display: none
     transition all 0.5s
-    // height 0
-    // position: fixed
+
 
 
 .control 
@@ -45,6 +43,7 @@ canvas
     align-items: center
     margin: 5px 0
     span 
+      user-select none
       background: #fff
       text-align: center
       line-height: 20px 
@@ -76,8 +75,8 @@ canvas
       &:focus
         box-shadow: 0 1px 5px 5px rgba(0, 0, 0, 0.1)
 
-body
-  transition all 0.8s
+
+
 @media screen and (max-width:415px) 
   .control 
     .inputs

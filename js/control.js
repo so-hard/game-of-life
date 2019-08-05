@@ -4,8 +4,6 @@ class Control {
     this.ControlDom = document.getElementsByClassName('control')[0];
     // 每个组件
     this.ControlComponents = new Map();
-    // inputs里面的数据
-    this.inputDatas = {}
     //需要一个convas 画板
     this.bord = bord
     // 用来判断时候初始化 `board`
@@ -19,6 +17,8 @@ class Control {
     this.setControlComponents('stopBut', 'reset_but')
     this.setControlComponents('stepBut', 'step_but')
     this.setControlComponents('layer')
+    console.log(document.querySelector('.layer'))
+    console.log(document.getElementsByClassName('layer'))
     this.startAction()
     this.resetAciton()
     this.stepAction()
@@ -38,7 +38,6 @@ class Control {
   //向map中添加dom
   setControlComponents(name, targ = name) {
     let targDom = this.ControlDom.getElementsByClassName(targ)[0];
-    targDom = targDom.children.length > 1 ? targDom.children : targDom;
     this.ControlComponents.set(name, targDom)
   }
 
@@ -46,13 +45,15 @@ class Control {
     return this.ControlComponents.get(name)
   }
 
-  setInputDatas() {
+  getInputDatas() {
     //获取input htmlColection,遍历得到key，
-    let inputs = this.getControlComponent('inputs');
-    for (const input of inputs) {
+    let inputs = this.getControlComponent('inputs'),
+    inputData = {};
+    for (const input of inputs.children) {
       let [key, value] = [input.name, Number(input.value)]
-      this.inputDatas[key] = value
+     inputData[key] = value
     }
+    return inputData
   }
 
   // 检查表单数据
@@ -84,8 +85,7 @@ class Control {
         startBut.innerHTML = "pause"
         if (this.isboaedInit == 0) {
           this.isboaedInit += 1
-          this.setInputDatas()
-          this.bord.init(this.inputDatas)
+          this.bord.init(this.getInputDatas())
         }
         this.bord.startAnimation()
       } else {
@@ -105,6 +105,10 @@ class Control {
     })
   }
 
+  setLayer() {
+    let layer = this.getControlComponent('layer');
+    // layer.
+  }
 }
 
 export default Control
